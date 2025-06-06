@@ -1,55 +1,56 @@
-var answer = 1;
-var triangleColor;
-
-setup = function() {
-    size(400, 400);
-    triangleColor = color(random(255), random(255), random(255)); // Initial random color for triangle
+String[] answers = {
+  "Yes", "No", "Ask again later", 
+  "My sources say no", "It is certain", 
+  "Very likely", "Outlook not so good", 
+  "Don't count on it", "Yes, in due time"
 };
 
-draw = function(){
-    background(100,100,100);
+String currentAnswer = "Click anywhere!";
+color ballColor;
 
-    // Draw the magic 8-ball circle
-    fill(0, 0, 0);
-    ellipse(200, 200, 375, 375);
-    
-    // Draw the triangle with the dynamic color
-    fill(triangleColor);
-    triangle(200, 104, 280, 280, 120, 280);
+void setup() {
+  size(600, 400);
+  ballColor = color(0, 0, 255); // Default color
+  textAlign(CENTER, CENTER);
+  textSize(20);
+}
 
-    // Display answer text
-    fill(255, 255, 255);
-    if (answer == 1) {
-        text("MAYBE", 176, 200);
-        text("NOT", 159, 229); 
-    }
-  
-    if (answer == 2) {
-        text("IT WILL COME", 176, 200);
-        text("INTO FRUITION", 159, 229); 
-    }
-  
-    if (answer == 3) {
-        text("CORRECT", 176, 200);
-    }
+void draw() {
+  background(50, 0, 100);
 
-    if (answer == 4) {
-        text("YOU ARENT", 176, 200);
-        text("CORRECT", 159, 229); 
-    }
+  // Ball
+  fill(ballColor);
+  ellipse(width/2, height/2, 250, 250);
 
+  // Answer inside ball
+  fill(255);
+  text(currentAnswer, width/2, height/2);
 
-    if (answer == 5) {
-        text("MAYBE ", 176, 200);
-        text("YES", 159, 229); 
-    }
+  // Show mouseX and mouseY (Feature 1)
+  textSize(12);
+  text("mouseX: " + mouseX + " | mouseY: " + mouseY, width/2, height - 20);
+}
 
-    // Draw the 8-ball emoji following the mouse
-    textSize(32);
-    text(" 🎱 ", mouseX - 20, mouseY + 10); // Adjusting position to better center the emoji
-};
+void mousePressed() {
+  shakeBall();
+}
 
-mouseClicked = function() {
-    answer = round(random(1, 5)); // Change the answer randomly
-    triangleColor = color(random(255), random(255), random(255)); // Change the triangle color each click
-};
+void keyPressed() {
+  if (key == ' ') {
+    shakeBall();
+  }
+}
+
+// Custom Function (uses random, if, ||)
+void shakeBall() {
+  int index = int(random(answers.length));
+  currentAnswer = answers[index];
+
+  if (currentAnswer.indexOf("Yes") > -1 || currentAnswer.indexOf("certain") > -1) {
+    ballColor = color(0, 255, 0); // green
+  } else if (currentAnswer.indexOf("No") > -1) {
+    ballColor = color(255, 0, 0); // red
+  } else {
+    ballColor = color(0, 0, 255); // blue
+  }
+}
