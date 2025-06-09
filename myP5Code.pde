@@ -1,56 +1,64 @@
-String[] answers = {
-  "Yes", "No", "Ask again later", 
-  "My sources say no", "It is certain", 
-  "Very likely", "Outlook not so good", 
-  "Don't count on it", "Yes, in due time"
+var answer = 1;
+var triangleColor;
+
+setup = function() {
+    size(400, 400);
+    triangleColor = color(random(255), random(255), random(255)); // random triangle color
+    textAlign(CENTER, CENTER);
+    textSize(16);
 };
 
-String currentAnswer = "Click anywhere!";
-color ballColor;
+draw = function() {
+    background(50, 0, 100);
 
-void setup() {
-  size(600, 400);
-  ballColor = color(0, 0, 255); // Default color
-  textAlign(CENTER, CENTER);
-  textSize(20);
-}
+    // Magic 8 Ball Circle
+    fill(0);
+    ellipse(200, 200, 300, 300);
+    
+    // Colored Triangle
+    fill(triangleColor);
+    triangle(200, 120, 270, 270, 130, 270);
 
-void draw() {
-  background(50, 0, 100);
+    // White Text for Answer
+    fill(255);
+    
+    if (answer === 1) {
+        text("MAYBE", 200, 190);
+        text("NOT", 200, 215); 
+    } else if (answer === 2) {
+        text("IT WILL COME", 200, 190);
+        text("INTO FRUITION", 200, 215); 
+    } else if (answer === 3) {
+        text("CORRECT", 200, 200);
+    } else if (answer === 4) {
+        text("YOU AREN'T", 200, 190);
+        text("CORRECT", 200, 215); 
+    } else if (answer === 5) {
+        text("MAYBE", 200, 190);
+        text("YES", 200, 215); 
+    }
 
-  // Ball
-  fill(ballColor);
-  ellipse(width/2, height/2, 250, 250);
+    // Lucky Message
+    if (answer === 3 || answer === 5) {
+        textSize(14);
+        text("LUCKY!", 200, 60);
+    }
 
-  // Answer inside ball
-  fill(255);
-  text(currentAnswer, width/2, height/2);
+    // 8-ball emoji
+    textSize(32);
+    text("🎱", mouseX, mouseY);
+};
 
-  // Show mouseX and mouseY (Feature 1)
-  textSize(12);
-  text("mouseX: " + mouseX + " | mouseY: " + mouseY, width/2, height - 20);
-}
+// Click to randomize answer and color
+mouseClicked = function() {
+    answer = round(random(1, 5));
+    triangleColor = color(random(255), random(255), random(255));
+};
 
-void mousePressed() {
-  shakeBall();
-}
-
-void keyPressed() {
-  if (key == ' ') {
-    shakeBall();
-  }
-}
-
-// Custom Function (uses random, if, ||)
-void shakeBall() {
-  int index = int(random(answers.length));
-  currentAnswer = answers[index];
-
-  if (currentAnswer.indexOf("Yes") > -1 || currentAnswer.indexOf("certain") > -1) {
-    ballColor = color(0, 255, 0); // green
-  } else if (currentAnswer.indexOf("No") > -1) {
-    ballColor = color(255, 0, 0); // red
-  } else {
-    ballColor = color(0, 0, 255); // blue
-  }
-}
+// Spacebar to also randomize
+keyPressed = function() {
+    if (keyCode === 32) {
+        answer = round(random(1, 5));
+        triangleColor = color(random(255), random(255), random(255));
+    }
+};
